@@ -112,6 +112,13 @@ moveFilesWithoutDateTimeOriginal () {
     echo "~~ Move Files Without Specified DateTimeOriginal Meta Data"
     exiftool -if '(not $DateTimeOriginal)' -if '($FilePath !~ "_unknown")' "-filename=%d/_unknown/%f.%e"  .
 }
+
+renameFilesBasedOnDateTimeOriginal () {
+    echo ""
+    echo "~~ Rename Files Based on DateTimeOriginal"
+    exiftool -dateFormat %Y-%m-%d-%H%M%S%%-c.%%e "-filename<DateTimeOriginal" .
+}
+
 parseInputArguments $arg1_path_to_media_files
 switchPath $media_path
 
@@ -119,3 +126,4 @@ updateDateTimeOriginalForVideoMedia
 updateDateTimeOriginalForMessengerMedia
 updateDateTimeOriginalByCreateDate
 moveFilesWithoutDateTimeOriginal
+renameFilesBasedOnDateTimeOriginal
