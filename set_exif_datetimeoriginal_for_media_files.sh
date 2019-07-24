@@ -107,9 +107,15 @@ updateDateTimeOriginalByCreateDate () {
     exiftool -overwrite_original -if '(not $DateTimeOriginal)' -if '($CreateDate)' "-DateTimeOriginal<CreateDate" .
 }
 
+moveFilesWithoutDateTimeOriginal () {
+    echo ""
+    echo "~~ Move Files Without Specified DateTimeOriginal Meta Data"
+    exiftool -if '(not $DateTimeOriginal)' -if '($FilePath !~ "_unknown")' "-filename=%d/_unknown/%f.%e"  .
+}
 parseInputArguments $arg1_path_to_media_files
 switchPath $media_path
 
 updateDateTimeOriginalForVideoMedia
 updateDateTimeOriginalForMessengerMedia
 updateDateTimeOriginalByCreateDate
+moveFilesWithoutDateTimeOriginal
