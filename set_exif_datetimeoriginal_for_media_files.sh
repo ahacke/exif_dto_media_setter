@@ -101,8 +101,15 @@ updateDateTimeOriginalForMessengerMedia () {
     done
 }
 
+updateDateTimeOriginalByCreateDate () {
+    echo ""
+    echo "~~ Update DateTimeOriginal by CreateDate"
+    exiftool -overwrite_original -if '(not $DateTimeOriginal)' -if '($CreateDate)' "-DateTimeOriginal<CreateDate" .
+}
+
 parseInputArguments $arg1_path_to_media_files
 switchPath $media_path
 
 updateDateTimeOriginalForVideoMedia
 updateDateTimeOriginalForMessengerMedia
+updateDateTimeOriginalByCreateDate
