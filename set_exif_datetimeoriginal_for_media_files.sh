@@ -119,6 +119,8 @@ renameFilesBasedOnDateTimeOriginal () {
     exiftool -dateFormat %Y-%m-%d-%H%M%S%%-c.%%e "-filename<DateTimeOriginal" .
 }
 
+echo "~~~~~~~~~ set_exif_datetimeoriginal_for_media_files ~~~~~~~~~"
+
 parseInputArguments $arg1_path_to_media_files
 switchPath $media_path
 
