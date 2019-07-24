@@ -45,5 +45,38 @@ switchPath () {
     cd $path
 }
 
+updateDateTimeOriginalForVideoMedia () {
+    echo ""
+    echo "~~ Update DateTimeOriginal for Video Media"
+
+    for filename in *.mp4 *.m4v *.mov; do
+        # Skip if file does not exist
+        [ -e "$filename" ] || continue
+
+        metadata_DateTimeOriginal=$(exiftool '-DateTimeOriginal' '-s' '-s' '-s' "$filename")
+
+        # Skip file if DateTimeOriginal is already present
+        [ -z "$metadata_DateTimeOriginal" ] || continue
+
+	    echo "Working on $filename"
+
+        metadata_CreateDate=$(exiftool '-CreateDate' '-s' '-s' '-s' "$filename")
+        if [ -n "$metadata_CreateDate" ]
+        then
+             exiftool -q -overwrite_original -if '$CreateDate' '-CreateDate>DateTimeOriginal' "$filename"
+             continue
+        fi
+
+        metadata_ContentCreateDate$(exiftool '-ContentCreateDate' '-s' '-s' '-s' "$filename")
+        if [ -n "$metadata_ContentCreateDate" ]
+        then
+             exiftool -q -overwrite_original -if '$ContentCreateDate' '-ContentCreateDate>DateTimeOriginal' "$filename"
+             continue
+        fi
+    done
+}
+
 parseInputArguments $arg1_path_to_media_files
 switchPath $media_path
+
+updateDateTimeOriginalForVideoMedia
