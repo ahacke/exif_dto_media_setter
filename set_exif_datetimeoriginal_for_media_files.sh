@@ -76,7 +76,33 @@ updateDateTimeOriginalForVideoMedia () {
     done
 }
 
+updateDateTimeOriginalForMessengerMedia () {
+    echo ""
+    echo "~~ Update DateTimeOriginal for Messenger Media"
+    
+    for filename in *.jpg *.png; do
+        # Skip if file does not exist
+        [ -e "$filename" ] || continue
+
+        metadata_DateTimeOriginal=$(exiftool '-DateTimeOriginal' '-s' '-s' '-s' "$filename")
+
+        # Skip file if DateTimeOriginal is already present
+        [ -z "$metadata_DateTimeOriginal" ] || continue
+
+        if [[ "$filename" =~ WA ]]
+        then
+            echo "WhatsApp match: $filename"
+            exiftool -overwrite_original '-DateTimeOriginal<${filename;$_=substr($_,4,12)} 00:00:00' "$filename"
+        elif [[ "$filename" =~ signal ]]
+        then
+            echo "Signal match: $filename"
+            exiftool -overwrite_original '-DateTimeOriginal<${filename;$_=substr($_,7,17)}'  "$filename"
+        fi
+    done
+}
+
 parseInputArguments $arg1_path_to_media_files
 switchPath $media_path
 
 updateDateTimeOriginalForVideoMedia
+updateDateTimeOriginalForMessengerMedia
