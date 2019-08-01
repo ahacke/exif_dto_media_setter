@@ -1,4 +1,7 @@
 #!/bin/sh
+: <<'END'
+Version: 1.0
+END
 
 # Input arguments
 arg1_path_to_media_files=$1
@@ -75,6 +78,21 @@ updateDateTimeOriginalForVideoMedia () {
         fi
     done
 }
+
+: <<'END'
+# not used yet, as variables cannot be used in the if block of exiftool
+setIfPresent () {
+    local field = $1
+    [ -n "$field" ] || exit 1
+    
+    metadata_field=$(exiftool '-"$field"' '-s' '-s' '-s' "$filename")
+        if [ -n "$metadata_field" ]
+        then
+             exiftool -q -overwrite_original -if '$CreateDate' '-CreateDate>DateTimeOriginal' "$filename"
+             continue
+        fi
+}
+END
 
 updateDateTimeOriginalForMessengerMedia () {
     echo ""
