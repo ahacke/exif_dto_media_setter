@@ -6,7 +6,7 @@ The script is mostly based on multiple individual commands and scripts from http
 ## How to run?
 
  ```
- ./set_exif_datetimeoriginal_for_media_files.sh <PATH>
+ ./exif_dto_media_setter.sh <PATH>
  ```
 
 ## List and Details to Media Meta Data Tags
