@@ -104,17 +104,17 @@ updateDateTimeOriginalForMessengerMedia () {
 
         metadata_DateTimeOriginal=$(exiftool '-DateTimeOriginal' '-s' '-s' '-s' "$filename")
 
-		# Remove DateTimeOriginal if it is "0000:00:00 00:00:00"
-		if [[ "$metadata_DateTimeOriginal" =~ "0000:00:00 00:00:00" ]]
-		then
-			#DEBUG echo "Removing 0000:00:00 00:00:00 DateTimeOriginal"
-			exiftool -overwrite_original -DateTimeOriginal= "$filename"
-			metadata_DateTimeOriginal=""
-		fi
-		
+        # Remove DateTimeOriginal if it is "0000:00:00 00:00:00"
+        if [[ "$metadata_DateTimeOriginal" =~ "0000:00:00 00:00:00" ]]
+        then
+            #DEBUG echo "Removing 0000:00:00 00:00:00 DateTimeOriginal"
+            exiftool -overwrite_original -DateTimeOriginal= "$filename"
+            metadata_DateTimeOriginal=""
+        fi
+
         # Skip file if DateTimeOriginal is already present
         [ -z "$metadata_DateTimeOriginal" ] || continue
-		
+
         if [[ "$filename" =~ WA ]]
         then
             echo "WhatsApp match: $filename"
